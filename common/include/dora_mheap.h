@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-11-03 17:33:18
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-04 16:56:09
+ * @LastEditTime: 2020-11-04 17:47:50
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -151,13 +151,13 @@ typedef struct mheap_blk {
 
 class mheap {
 private:
-    std::vector<char *> _mheap_ptr;
-    std::vector<void *> _pool_start;
-    mheap_blk_t     _block_null;    /* empty lists point at this block to indicate they are free. */
-    uint32_t        _fl_bitmap;     /* bitmaps for free lists. */
-    uint32_t        _sl_bitmap[MHEAP_FL_INDEX_COUNT];
-    mheap_blk_t     *_blocks[MHEAP_FL_INDEX_COUNT][MHEAP_SL_INDEX_COUNT]; /**< Head of free lists. */
-    std::mutex      _mutex;
+    std::vector<char *>     _mheap_ptr;
+    std::vector<void *>     _pool_start;
+    mheap_blk_t             _block_null;    /* empty lists point at this block to indicate they are free. */
+    uint32_t                _fl_bitmap;     /* bitmaps for free lists. */
+    uint32_t                _sl_bitmap[MHEAP_FL_INDEX_COUNT];
+    mheap_blk_t             *_blocks[MHEAP_FL_INDEX_COUNT][MHEAP_SL_INDEX_COUNT]; /**< Head of free lists. */
+    std::mutex              _mutex;
 
     void insert_free_block(mheap_blk_t *blk, int fl, int sl);
     void remove_free_block(mheap_blk_t *blk, int fl, int sl);

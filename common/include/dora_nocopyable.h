@@ -3,17 +3,15 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-10-25 17:00:10
  * @LastEditors: jiejie
- * @LastEditTime: 2020-10-25 17:00:47
+ * @LastEditTime: 2020-11-04 17:47:08
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _DORA_NONCOPYABLE_H_
 #define _DORA_NONCOPYABLE_H_
 
-namespace doralib
-{
+namespace doralib {
 
-class noncopyable
-{
+class noncopyable {
  public:
   noncopyable(const noncopyable&) = delete;
   void operator=(const noncopyable&) = delete;

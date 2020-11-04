@@ -10,8 +10,7 @@
 
 #include "spdlog/spdlog.h"
 
-namespace doralib 
-{
+namespace doralib  {
 #define DORA_LOG_TRACE_LEVEL        spdlog::level::level_enum::trace
 #define DORA_LOG_DEBUG_LEVEL        spdlog::level::level_enum::debug
 #define DORA_LOG_INFO_LEVEL         spdlog::level::level_enum::info

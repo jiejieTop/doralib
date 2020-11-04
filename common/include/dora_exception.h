@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-10-29 15:20:57
+ * @LastEditTime: 2020-11-04 17:47:18
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _DORA_EXCEPTION_H_
@@ -13,8 +13,7 @@
 
 #define DORA_EXCEPTION(msg) doralib::exception((char *)__FILE__, __LINE__, (char *)msg, true)
 
-namespace doralib 
-{
+namespace doralib {
 using std::string;
 /**
  * @brief This class is instantiated and thrown when an error occurs.
