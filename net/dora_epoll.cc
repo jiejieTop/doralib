@@ -198,11 +198,11 @@ int epoller::epoller_add(dgram_socket *dgram, epoller_event_type_t type, dgram_e
     if (NULL != events) {
         epoller_event_add_cb(events, type, cb);
         epoller_update(EPOLL_CTL_MOD, dgram->getfd(), events->events);
-        return DORA_SUCCESS_ERROR;
+        return DORA_SUCCESS;
     }
     
     events = new epoller_events_t;
-    DORA_ROBUSTNESS_CHECK(events, DORA_MEM_NOT_ENOUGH_ERROR);
+    DORA_ROBUSTNESS_CHECK(events, DORA_MEM_NOT_ENOUGH);
     memset(events, 0, sizeof(epoller_events_t));
     events->type = DORA_SOCK_UDP;
     events->u.dgram_event.dgram = dgram;
@@ -216,7 +216,7 @@ int epoller::epoller_add(dgram_socket *dgram, epoller_event_type_t type, dgram_e
     epoller_event_add_cb(events, type, cb);
     epoller_update(EPOLL_CTL_ADD, dgram->getfd(), events->events);
 
-    return DORA_SUCCESS_ERROR;
+    return DORA_SUCCESS;
 }
 
 int epoller::epoller_del(dgram_socket *dgram)
@@ -226,7 +226,7 @@ int epoller::epoller_del(dgram_socket *dgram)
         epoller_update(EPOLL_CTL_DEL, dgram->getfd(), events->events);
         delete events;
     }
-    return DORA_SUCCESS_ERROR;
+    return DORA_SUCCESS;
 }
 
 void epoller::epoller_del(void)

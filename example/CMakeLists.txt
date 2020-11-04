@@ -8,7 +8,9 @@ set(LIBRARY_OUTPUT_PATH "${PARENT_DIR}/${OUTDIRS}/lib/")
 set(EXECUTABLE_OUTPUT_PATH "${PARENT_DIR}/${OUTDIRS}/bin/")
 
 # example depent lib
-set(DEPENT_DORA_LIBNAME "net" "thpool")
+set(DEPENT_DORA_LIBNAME "net" "thpool" "common")
+
+set(CMAKE_BUILD_TYPE "Debug")   # Debug Release
 
 # lib prefix
 # set(CMAKE_INSTALL_PREFIX "/home/$ENV{USER}")

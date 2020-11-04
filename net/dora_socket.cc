@@ -150,10 +150,10 @@ int sock::sock_connect(const char *addr, const char *port)
 
     if (DORA_SOCK_UDP == _type) {
         _is_connected = true;
-        return DORA_SUCCESS_ERROR;
+        return DORA_SUCCESS;
     }
 
-    int ret = DORA_SOCKET_UNKNOWN_HOST_ERROR;
+    int ret = DORA_SOCKET_UNKNOWN_HOST;
     struct addrinfo hints, *addr_list, *cur;
     
     /* Do name resolution with both IPv6 and IPv4 */
@@ -173,7 +173,7 @@ int sock::sock_connect(const char *addr, const char *port)
         }
         close(_sockfd);
         DORA_LOG_ERROR("socket connect {} : {} fail ...", addr, port);
-        ret = DORA_CONNECT_FAILED_ERROR;
+        ret = DORA_SOCKET_CONNECT_FAILED;
     }
     freeaddrinfo(addr_list);
     return ret;
@@ -187,10 +187,10 @@ int sock::sock_connect(const std::string & addr, const std::string & port)
 
     if (DORA_SOCK_UDP == _type) {
         _is_connected = true;
-        return DORA_SUCCESS_ERROR;
+        return DORA_SUCCESS;
     }
     
-    int ret = DORA_SOCKET_UNKNOWN_HOST_ERROR;
+    int ret = DORA_SOCKET_UNKNOWN_HOST;
     struct addrinfo hints, *addr_list, *cur;
     
     /* Do name resolution with both IPv6 and IPv4 */
@@ -211,7 +211,7 @@ int sock::sock_connect(const std::string & addr, const std::string & port)
         }
         close(_sockfd);
         DORA_LOG_ERROR("socket connect {} : {} fail ...", addr, port);
-        ret = DORA_CONNECT_FAILED_ERROR;
+        ret = DORA_SOCKET_CONNECT_FAILED;
     }
     freeaddrinfo(addr_list);
     return ret;

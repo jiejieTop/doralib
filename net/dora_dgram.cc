@@ -14,7 +14,7 @@ namespace doralib {
 
 int dgram_socket::dgram_set_addr(sockaddr_in & sockaddr, const char *addr, const char *port)
 {
-    int ret = DORA_SOCKET_UNKNOWN_HOST_ERROR;
+    int ret = DORA_SOCKET_UNKNOWN_HOST;
     struct addrinfo hints, *addr_list, *cur;
 
     memset(&sockaddr, 0, sizeof(struct sockaddr_in));
@@ -44,7 +44,7 @@ int dgram_socket::dgram_set_addr(sockaddr_in & sockaddr, const char *addr, const
             struct sockaddr_in *addr;
             addr = (struct sockaddr_in *)cur->ai_addr;
             memcpy(&sockaddr, addr, sizeof(struct sockaddr_in));
-            ret = DORA_SUCCESS_ERROR;
+            ret = DORA_SUCCESS;
             break;
         case AF_INET6:
             DORA_LOG_ERROR("not support!");
@@ -61,7 +61,7 @@ int dgram_socket::dgram_set_addr(sockaddr_in & sockaddr, const char *addr, const
 
 int dgram_socket::dgram_set_addr(sockaddr_in & sockaddr, const std::string & addr, const std::string & port)
 {
-    int ret = DORA_SOCKET_UNKNOWN_HOST_ERROR;
+    int ret = DORA_SOCKET_UNKNOWN_HOST;
     struct addrinfo hints, *addr_list, *cur;
 
     bzero(&sockaddr,sizeof(sockaddr));
@@ -86,7 +86,7 @@ int dgram_socket::dgram_set_addr(sockaddr_in & sockaddr, const std::string & add
             struct sockaddr_in *addr;
             addr = (struct sockaddr_in *)cur->ai_addr;
             memcpy(&sockaddr, addr, sizeof(struct sockaddr_in));
-            ret = DORA_SUCCESS_ERROR;
+            ret = DORA_SUCCESS;
             break;
         case AF_INET6:
             DORA_LOG_ERROR("not support!");
@@ -146,63 +146,63 @@ dgram_socket::~dgram_socket()
 int dgram_socket::dgram_connect(void)
 {
     if (true == _s->sock_is_connected())
-        return DORA_SUCCESS_ERROR;
+        return DORA_SUCCESS;
 
     if (!_s->sock_is_connected())
         return _s->sock_connect(_remote_addr);
     
-    return DORA_SUCCESS_ERROR;
+    return DORA_SUCCESS;
 }
 
 int dgram_socket::dgram_connect(const sockaddr_in *addr)
 {
     if (true == _s->sock_is_connected())
-        return DORA_SUCCESS_ERROR;
+        return DORA_SUCCESS;
 
     if (!_s->sock_is_connected())
         return _s->sock_connect(addr);
     
-    return DORA_SUCCESS_ERROR;
+    return DORA_SUCCESS;
 }
 
 int dgram_socket::dgram_connect(const sockaddr_in & addr)
 {
     if (true == _s->sock_is_connected())
-        return DORA_SUCCESS_ERROR;
+        return DORA_SUCCESS;
 
     if (!_s->sock_is_connected())
         return _s->sock_connect(addr);
     
-    return DORA_SUCCESS_ERROR;
+    return DORA_SUCCESS;
 }
 
 int dgram_socket::dgram_connect(const char *addr, const char *port)
 {
-    int ret = DORA_SUCCESS_ERROR;
+    int ret = DORA_SUCCESS;
 
     if (true == _s->sock_is_connected())
-        return DORA_SUCCESS_ERROR;
+        return DORA_SUCCESS;
 
-    if (DORA_SUCCESS_ERROR != (ret = dgram_set_addr(_remote_addr, addr, port)))
+    if (DORA_SUCCESS != (ret = dgram_set_addr(_remote_addr, addr, port)))
         return ret;
 
     if (!_s->sock_is_connected())
         return _s->sock_connect(addr, port);
     
-    return DORA_SUCCESS_ERROR;
+    return DORA_SUCCESS;
 }
 
 int dgram_socket::dgram_connect(const std::string & addr, const std::string & port)
 {
     if (true == _s->sock_is_connected())
-        return DORA_SUCCESS_ERROR;
+        return DORA_SUCCESS;
 
     dgram_set_addr(_remote_addr, addr, port);
 
     if (!_s->sock_is_connected())
         return _s->sock_connect(addr, port);
     
-    return DORA_SUCCESS_ERROR;
+    return DORA_SUCCESS;
 }
 
 int dgram_socket::dgram_bind(const char *port)
