@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-11-04 17:16:29
+ * @LastEditTime: 2020-11-04 17:45:39
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -16,31 +16,27 @@ namespace doralib
 
 typedef enum dora_errors {
     /* other error */
-    DORA_NOTHING_TO_READ                            = -100,     
+    DORA_NOTHING_TO_READ                            = -500,     
     /* buffer error */
-    DORA_BUFFER_TOO_LONG                            = -81,      
-    DORA_BUFFER_TOO_SHORT                           = -80,
+    DORA_BUFFER_TOO_LONG                            = -401,      
+    DORA_BUFFER_TOO_SHORT                           = -400,
     /* memory error */
-    DORA_MEM_NOT_ENOUGH                             = -60,      
+    DORA_MEM_NOT_ENOUGH                             = -300,      
     /* socket error */
-    DORA_SOCKET_SEND_FAILED                         = -35,      
-    DORA_SOCKET_READ_FAILED                         = -34,
-    DORA_SOCKET_BIND_FAILED                         = -33,
-    DORA_SOCKET_CONNECT_FAILED                      = -32,
-    DORA_SOCKET_UNKNOWN_HOST                        = -31,
-    DORA_SOCKET_FAILED                              = -30,
+    DORA_SOCKET_SEND_FAILED                         = -205,      
+    DORA_SOCKET_READ_FAILED                         = -204,
+    DORA_SOCKET_BIND_FAILED                         = -203,
+    DORA_SOCKET_CONNECT_FAILED                      = -202,
+    DORA_SOCKET_UNKNOWN_HOST                        = -201,
+    DORA_SOCKET_FAILED                              = -200,
     /* value error */
-    DORA_VALUE_ALREADY_NOT_EXIST                    = -5,       
-    DORA_VALUE_ALREADY_EXIST                        = -4,
-    DORA_VALUE_OVERFLOW                             = -3,
-    DORA_VALUE_INVALID                              = -2,       /* value is invalid */
+    DORA_VALUE_ALREADY_NOT_EXIST                    = -103,       
+    DORA_VALUE_ALREADY_EXIST                        = -102,
+    DORA_VALUE_OVERFLOW                             = -101,
+    DORA_VALUE_INVALID                              = -100,       /* value is invalid */
     DORA_FAILED                                     = -1,
     DORA_SUCCESS                                    = 0
 } dora_errors_t;
-
-
-
-
 
 #define DORA_VOID   
 
