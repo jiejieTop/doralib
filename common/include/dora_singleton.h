@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-10-27 12:02:45
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-01 14:04:14
+ * @LastEditTime: 2020-11-04 17:51:35
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _DORA_SINGLETON_H_
@@ -35,10 +35,8 @@ public:
     static T* get() {
         if (!_ptr) {
             std::lock_guard<std::mutex> guard(_m);
-            printf("++++++++++++++++++++\n");
             _ptr = new T;
         }
-        printf("++++++++++++++++++++1\n");
         return _ptr;
     }
 
@@ -52,7 +50,6 @@ public:
 
     /// Destroys the managed singleton instance.
     void destroy() {
-        printf("------------------\n");
         std::lock_guard<std::mutex> guard(_m);
         if (_ptr)
             delete _ptr;

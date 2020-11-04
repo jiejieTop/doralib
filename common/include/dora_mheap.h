@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-11-03 17:33:18
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-04 17:47:50
+ * @LastEditTime: 2020-11-04 17:52:20
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -179,6 +179,7 @@ private:
 public:
     mheap();
     mheap(size_t size);
+    mheap(const mheap&) = delete;
     ~mheap();
 
     /**
