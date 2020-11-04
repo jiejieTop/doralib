@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-11-04 17:47:25
+ * @LastEditTime: 2020-11-04 19:08:26
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -40,7 +40,7 @@ typedef enum dora_errors {
 #define DORA_VOID   
 
 #define DORA_ROBUSTNESS_CHECK(item, err) if (!(item)) {                                             \
-        DORA_LOG_ERROR("%s:%d %s()... check for error.", __FILE__, __LINE__, __FUNCTION__);         \
+        DORA_LOG_ERROR("{}:{} {}()... check for error.", __FILE__, __LINE__, __FUNCTION__);         \
         return err; }
 
 
