@@ -37,9 +37,10 @@ target_link_libraries(${LIB_NAME} ${CMAKE_THREAD_LIBS_INIT})
 #############
 
 install(TARGETS ${LIB_NAME}
-  EXPORT ${LIB_NAME}
+  EXPORT ${LIB_NAME}-targets
   LIBRARY DESTINATION ${INSTALL_LIBDIR}     # SHARED
   ARCHIVE DESTINATION ${INSTALL_LIBDIR}     # STATIC
+  PUBLIC_HEADER DESTINATION ${INSTALL_INCLUDE_DIR}
 )
 
 # Mark cpp header files for installation
@@ -49,24 +50,8 @@ install(DIRECTORY ${LIB_INC_DIR}
   PATTERN ".svn" EXCLUDE
 )
 
-
-# install(
-#   EXPORT ${LIB_NAME}
-#   FILE ${LIB_NAME}.cmake
-#   NAMESPACE ${LIB_NAME}::
-#   DESTINATION lib/cmake/${LIB_NAME})
-
-# include(CMakePackageConfigHelpers)
-
-# configure_package_config_file(
-#   ${LIB_NAME}Config.cmake.in ${PROJECT_BINARY_DIR}/${LIB_NAME}Config.cmake
-#   INSTALL_DESTINATION lib/cmake/${LIB_NAME})
-
-# write_basic_package_version_file(
-#   ${LIB_NAME}ConfigVersion.cmake
-#   VERSION ${PACKAGE_VERSION}
-#   COMPATIBILITY SameMajorVersion)
-
-# install(FILES "${PROJECT_BINARY_DIR}/${LIB_NAME}Config.cmake"
-#               "${PROJECT_BINARY_DIR}/${LIB_NAME}ConfigVersion.cmake"
-#         DESTINATION lib/cmake/${LIB_NAME})
+install(
+  EXPORT ${LIB_NAME}-targets
+  NAMESPACE ${LIB_NAME}::
+  FILE ${LIB_NAME}-config.cmake
+  DESTINATION lib/cmake/${LIB_NAME})

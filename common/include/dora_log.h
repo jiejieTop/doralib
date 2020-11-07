@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-10-24 15:38:19
+ * @LastEditTime: 2020-11-05 16:57:55
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _DORA_LOG_H_
@@ -28,6 +28,14 @@ namespace doralib  {
 #define DORA_LOG_OFF(msg, ...)      spdlog::off(msg, ##__VA_ARGS__)
 
 #define DORA_LOG_SET_LEVEL(l)       spdlog::set_level(l)
+
+#define DORA_LOG_SET_TRACE_LEVEL    { DORA_LOG_SET_LEVEL(DORA_LOG_TRACE_LEVEL); }
+#define DORA_LOG_SET_DEBUG_LEVEL    { DORA_LOG_SET_LEVEL(DORA_LOG_DEBUG_LEVEL); }
+#define DORA_LOG_SET_INFO_LEVEL     { DORA_LOG_SET_LEVEL(DORA_LOG_INFO_LEVEL); }
+#define DORA_LOG_SET_WARN_LEVEL     { DORA_LOG_SET_LEVEL(DORA_LOG_WARN_LEVEL); }
+#define DORA_LOG_SET_ERROR_LEVEL    { DORA_LOG_SET_LEVEL(DORA_LOG_ERROR_LEVEL); }
+#define DORA_LOG_SET_CRITICAL_LEVEL { DORA_LOG_SET_LEVEL(DORA_LOG_CRITICAL_LEVEL); }
+#define DORA_LOG_SET_OFF_LEVEL      { DORA_LOG_SET_LEVEL(DORA_LOG_OFF_LEVEL); }
 
 }
 

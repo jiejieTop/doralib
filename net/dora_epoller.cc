@@ -3,11 +3,11 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-10-29 19:05:37
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-02 17:32:56
+ * @LastEditTime: 2020-11-07 13:18:06
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
-#include "dora_epoll.h"
+#include "dora_epoller.h"
 #include "dora_error.h"
 #include <functional>
 
@@ -238,6 +238,7 @@ void epoller::epoller_del(void)
         events = t.second;
         if (DORA_SOCK_UDP == events->type) {
             epoller_del(events->u.dgram_event.dgram);
+            _events_map.erase(t.first);     /* delete _events_map by key */
         }
         else if (DORA_SOCK_TCP == events->type) {
             // epoller_del(events->u.stream_event.stream);

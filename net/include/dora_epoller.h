@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-10-28 19:24:32
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-02 16:14:43
+ * @LastEditTime: 2020-11-06 13:52:51
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 #ifndef _DORA_EPOLL_H_
@@ -73,7 +73,7 @@ class epoller {
     void epoller_event_add_cb(epoller_events_t *e, epoller_event_type_t type, dgram_event_cb cb);
     
     public:
-    int _is_running;
+    bool _is_running;
 
     epoller();
     epoller(const epoller &) = delete;

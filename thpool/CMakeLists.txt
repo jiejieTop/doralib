@@ -35,9 +35,10 @@ target_link_libraries(${LIB_NAME} ${CMAKE_CXX_FLAGS})
 #############
 
 install(TARGETS ${LIB_NAME}
-  EXPORT ${LIB_NAME}
+  EXPORT ${LIB_NAME}-targets
   LIBRARY DESTINATION ${INSTALL_LIBDIR}     # SHARED
   ARCHIVE DESTINATION ${INSTALL_LIBDIR}     # STATIC
+  PUBLIC_HEADER DESTINATION ${INSTALL_INCLUDE_DIR}
 )
 
 # Mark cpp header files for installation
@@ -46,4 +47,10 @@ install(DIRECTORY ${LIB_INC_DIR}
   FILES_MATCHING PATTERN "*.h"
   PATTERN ".svn" EXCLUDE
 )
+
+install(
+  EXPORT ${LIB_NAME}-targets
+  NAMESPACE ${LIB_NAME}::
+  FILE ${LIB_NAME}-config.cmake
+  DESTINATION lib/cmake/${LIB_NAME})
 

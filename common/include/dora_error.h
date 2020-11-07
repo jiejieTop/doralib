@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-11-04 19:08:26
+ * @LastEditTime: 2020-11-07 09:14:02
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -15,6 +15,7 @@ namespace doralib {
 
 typedef enum dora_errors {
     /* other error */
+    DORA_NOTHING_FOUND                              = -501, 
     DORA_NOTHING_TO_READ                            = -500,     
     /* buffer error */
     DORA_BUFFER_TOO_LONG                            = -401,      
