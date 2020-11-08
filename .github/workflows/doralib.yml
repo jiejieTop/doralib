@@ -1,0 +1,21 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: linux install cmake
+      run: sudo apt-get install -y cmake
+    - name: build and install
+      run: ./build.sh -i -e
+    - name: runnig test
+      run: ./run_example.sh
