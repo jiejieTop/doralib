@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-11-03 17:33:18
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-04 17:18:26
+ * @LastEditTime: 2020-11-08 11:06:16
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -861,7 +861,7 @@ void mheap::mheap_print_info(void)
     mheap_info_t info;
     mheap_check(&info);
 
-    DORA_LOG_DEBUG("pool count : {}, used space : {}, free space : {}", 
+    DORA_LOG_INFO("pool count : {}, used space : {}, free space : {}", 
                 (int)_pool_start.size(), info.used, info.free);
 }
 

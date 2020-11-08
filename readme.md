@@ -17,16 +17,16 @@
 
 ### 安装
 
-使用编译脚本的 **`-i`** 参数进行安装，**`-i`** 参数后支持指定安装目录，默认安装目录是 **`/usr/local`**, 请放心，**doralib** 不会污染您系统本身的库，运行该命令需要 **`sudo`** 权限。
+使用编译脚本的 **`-i`** 参数进行安装，**`-i`** 参数后支持指定安装目录，默认安装目录是 **`/usr/local`**, 请放心，**doralib** 不会污染您系统本身的库，运行该命令需要 **`sudo`** 权限（它会提示您输入密码）。
 
 ```bash
-    sudo ./build.sh -i
+    ./build.sh -i
 ```
 
 指定安装目录`/home/jie`
 
 ```bash
-    sudo ./build.sh -i/home/jie
+    ./build.sh -i/home/jie
 ```
 
 ### 编译example
@@ -36,6 +36,16 @@
 ```bash
     ./build.sh -e
 ```
+
+### 运行example
+
+所有的example代码文件在编译后会产生对应的可执行文件，位于 **`build/bin/`** 目录下，执行该文件即可。
+
+```bash
+    ./build/bin/epoll_example
+```
+
+
 
 ### 指定编译器
 

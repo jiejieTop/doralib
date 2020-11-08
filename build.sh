@@ -77,15 +77,15 @@ fun_do_make()
     fi
 
     if [ " $install" != " " ]; then
-        make install
+        sudo make install
     else
         make
     fi
 
     if [ " $build_example" != " " ]; then
-        mkdir -p $current_pwd/build_example $current_pwd/build_example/bin
-        cd $current_pwd/build_example
-        cmake ../example/.
+        mkdir -p $current_pwd/build/example
+        cd $current_pwd/build/example
+        cmake ../../example/.
         make
     fi
 }
