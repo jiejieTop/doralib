@@ -1,3 +1,10 @@
+![C/C++ CI](https://github.com/jiejieTop/doralib/workflows/C/C++%20CI/badge.svg)
+[![issues](https://img.shields.io/github/issues/jiejieTop/doralib)](https://github.com/jiejieTop/doralib/issues)
+![forks](https://img.shields.io/github/forks/jiejieTop/doralib)
+![stars](https://img.shields.io/github/stars/jiejieTop/doralib)
+[![license](https://img.shields.io/github/license/jiejieTop/doralib)](https://github.com/jiejieTop/doralib/blob/master/LICENSE)
+![](https://img.shields.io/badge/platform-Linux|Windows|Mac|Embedded-orange.svg)
+
 # doralib
 
 一个简单易用的 C++ 库。
@@ -39,13 +46,12 @@
 
 ### 运行example
 
-所有的example代码文件在编译后会产生对应的可执行文件，位于 **`build/bin/`** 目录下，执行该文件即可。
+所有的 **example** 代码文件在编译后会产生对应的可执行文件，位于 **`build/bin/`** 目录下，执行该文件即可。
 
+也可以运行 **`run_example.sh`** 测试脚本。
 ```bash
-    ./build/bin/epoll_example
+    ./run_example.sh
 ```
-
-
 
 ### 指定编译器
 
@@ -63,7 +69,15 @@
 
 ## common
 
-通用的依赖组件，如异常、日志（使用了spdlog）。
+通用的依赖组件。
+
+  - mheap ： 内存堆管理实现，使用 **tlsf** 内存管理算法，时间复杂度 **`O(1)`**，支持自动增长管理的内存块，无内存泄漏与内存碎片风险，支持多线程。
+  - mpool ： 内存池管理实现，支持多线程，时间复杂度为 **`O(1)`**，无内存泄漏与内存碎片风险。
+  - timer ： 定时器实现，使用一个线程调度定时事件，线程采用阻塞的方式等待超时，在插入定时器或者删除定时器的时候使用**POSIX信号量**作为通知，实现了最小堆，查找超时的定时器时间复杂度为 **`O(1)`**。
+  - utils ： 通用的小工具实现，如字符串哈希等。
+  - error ： 错误代码管理。
+  - exception ： 异常管理。
+  - spdlog ： 开源高效的日志管理库。
 
 ## thpool
 
@@ -73,5 +87,7 @@
     
 C++ socket 网络库（使用了epoll）。
 
-  - dgram：UDP协议传输。
+  - socket ： 封装了socket的所有功能。
+  - dgram ： UDP协议传输管理。
+  - epoller ：  epoll管理器，高效管理并非socket。
 
