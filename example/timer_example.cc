@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-11-06 14:29:27
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-07 12:30:24
+ * @LastEditTime: 2020-11-08 11:11:06
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -26,23 +26,24 @@ void timer_action(void *arg)
 int main()
 {
     // DORA_LOG_SET_DEBUG_LEVEL
+    DORA_LOG_INFO("========================= timer =========================");
     
     auto timer = new doralib::timer;
 
-    timer->add(5000, timer_action);
-    timer->add(1100, timer_action);
-    timer->add(1200, timer_action);
-    timer->add(2000, timer_action);
-    timer->add(3000, timer_action);
-    timer->add(4000, timer_action);
-    timer->add(5000, timer_action);
+    timer->add(500, timer_action);
+    timer->add(110, timer_action);
+    timer->add(120, timer_action);
     timer->add(200, timer_action);
-    timer->add(3020, timer_action);
-    timer->add(2000, timer_action, DORA_TIMER_MODE_PERIOD);
+    timer->add(300, timer_action);
+    timer->add(400, timer_action);
+    timer->add(500, timer_action);
+    timer->add(20, timer_action);
+    timer->add(310, timer_action);
+    timer->add(200, timer_action, DORA_TIMER_MODE_PERIOD);
     
+    sleep(1);
 
-    string line;
-    getline(cin, line);
+    DORA_LOG_INFO("========================= success =========================");
 
     return 0;
 }

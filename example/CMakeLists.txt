@@ -3,7 +3,7 @@ project(example)
 
 # set example out path
 get_filename_component(PARENT_DIR ${PROJECT_SOURCE_DIR} DIRECTORY)
-set(OUTDIRS "build_example")
+set(OUTDIRS "build")
 set(LIBRARY_OUTPUT_PATH "${PARENT_DIR}/${OUTDIRS}/lib/")
 set(EXECUTABLE_OUTPUT_PATH "${PARENT_DIR}/${OUTDIRS}/bin/")
 

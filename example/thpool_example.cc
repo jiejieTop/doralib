@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-10-26 13:26:44
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-02 17:21:07
+ * @LastEditTime: 2020-11-08 11:10:19
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -14,27 +14,32 @@
 
 
 // Simple function that adds multiplies two numbers and prints the result
-void multiply(const int a, const int b) {
-  const int res = a * b;
-  DORA_LOG_INFO("{} * {} = {}", a, b, res);
+void multiply(const int a, const int b) 
+{
+    const int res = a * b;
+    DORA_LOG_INFO("{} * {} = {}", a, b, res);
 }
 
 // Same as before but now we have an output parameter
-void multiply_output(int & out, const int a, const int b) {
-  out = a * b;
-  DORA_LOG_INFO("{} * {} = {}", a, b, out);
+void multiply_output(int & out, const int a, const int b) 
+{
+    out = a * b;
+    DORA_LOG_INFO("{} * {} = {}", a, b, out);
 }
 
 // Same as before but now we have an output parameter
-int multiply_return(const int a, const int b) {
-  const int res = a * b;
-  DORA_LOG_INFO("{} * {} = {}", a, b, res);
-  return res;
+int multiply_return(const int a, const int b) 
+{
+    const int res = a * b;
+    DORA_LOG_INFO("{} * {} = {}", a, b, res);
+    return res;
 }
 
 int main()
 {
-    DORA_LOG_SET_LEVEL(DORA_LOG_DEBUG_LEVEL);
+    DORA_LOG_INFO("========================= thpool =========================");
+    
+    DORA_LOG_SET_DEBUG_LEVEL
     
     auto pool = new doralib::thpool;
 
@@ -61,6 +66,8 @@ int main()
     DORA_LOG_INFO("last operation result is equals to {}", res);
 
     pool->shutdown();
+
+    DORA_LOG_INFO("========================= success =========================");
 
     return 0;
 }

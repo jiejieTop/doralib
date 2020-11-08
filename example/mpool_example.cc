@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-11-03 17:33:18
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-04 19:10:02
+ * @LastEditTime: 2020-11-08 11:08:36
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -38,8 +38,6 @@ int main()
 
         DORA_ROBUSTNESS_CHECK(ptr[i], -1);
         memset(ptr[i], 1, 1024);
-
-        DORA_LOG_INFO("ptr is {:p}", ptr[i]);
     }
 
     DORA_LOG_INFO("========================= free =========================");
@@ -48,11 +46,11 @@ int main()
         mpool->mpool_free(ptr[i - 1]);
     }
 
-    DORA_LOG_INFO("========================= success =========================");
-
     delete mpool;
 
     sleep(1);
+
+    DORA_LOG_INFO("========================= success =========================");
 
     return 0;
 }

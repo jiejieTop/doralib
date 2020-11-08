@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-11-03 17:33:18
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-04 15:53:19
+ * @LastEditTime: 2020-11-08 11:12:11
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -19,22 +19,20 @@ using doralib::mheap;
 
 #define DORA_END_CPRT   auto ecprt = std::chrono::steady_clock::now();  \
                         std::chrono::duration<double, std::micro> elapsed = ecprt - scprt;  \
-                        DORA_LOG_INFO("code runtime : {:03.06f} us", elapsed.count()); }
+                        DORA_LOG_DEBUG("code runtime : {:03.06f} us", elapsed.count()); }
 
 int main()
 {
-    int ret = -1;
-    char *ptr[500];
+    DORA_LOG_INFO("========================= mheap =========================");
+
+    char *ptr[10];
     auto mheap = new doralib::mheap;
 
-    auto _mheap_ptr = new char[MHEAP_DEFAULT_SIZE];
-    DORA_ROBUSTNESS_CHECK(_mheap_ptr, -1);
-    mheap->mheap_pool_add(_mheap_ptr, MHEAP_DEFAULT_SIZE);
-
+    mheap->mheap_print_info();
     
     DORA_LOG_INFO("========================= alloc =========================");
 
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < 10; i++) {
 
         DORA_STRT_CPRT
         
@@ -44,25 +42,19 @@ int main()
 
         DORA_ROBUSTNESS_CHECK(ptr[i], -1);
         memset(ptr[i], 1, 128 + i);
-
-        DORA_LOG_INFO("ptr is {:p}, size : {}", ptr[i], (128 + i));
-        mheap->mheap_print_info();
     }
+    mheap->mheap_print_info();
 
     DORA_LOG_INFO("========================= free =========================");
 
-    for (int i = 500; i > 0; i--) {
+    for (int i = 10; i > 0; i--) {
         mheap->mheap_free(ptr[i - 1]);
     }
 
+    mheap->mheap_print_info();
+
     DORA_LOG_INFO("========================= success =========================");
 
-    mheap->mheap_print_info();
-    ret = mheap->mheap_pool_del(_mheap_ptr);
-    DORA_LOG_INFO("delete pool ret is {}", ret);
-    mheap->mheap_print_info();
-
-    delete _mheap_ptr;
     delete mheap;
 
     sleep(1);
