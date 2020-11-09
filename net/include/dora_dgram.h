@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-11-02 14:43:11
+ * @LastEditTime: 2020-11-09 11:38:44
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -23,6 +23,7 @@ class dgram_socket {
     int dgram_set_addr(sockaddr_in & sockaddr, const std::string & addr, const std::string & port);
 
     public:
+    void *data;         /* user-available data pointers */
     dgram_socket();
     dgram_socket(const sockaddr_in & addr);
     dgram_socket(const char *addr, const char *port);
@@ -49,7 +50,9 @@ class dgram_socket {
     ssize_t dgram_sendto(const void *buf, size_t len, struct sockaddr *dest_addr, socklen_t addrlen, int timeout = -1, int flags = 0);
     
     void dgram_close(void);
-    
+    const sockaddr_in dgram_get_remote(void) { return _remote_addr; }
+    const sockaddr_in dgram_get_local(void) { return _local_addr; }
+
     int getfd(void) { return _s->sock_get_sockfd(); }
 
 };
