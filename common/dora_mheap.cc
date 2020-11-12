@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-11-03 17:33:18
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-08 11:06:16
+ * @LastEditTime: 2020-11-12 15:59:34
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -353,7 +353,6 @@ mheap::~mheap()
 void mheap::insert_free_block(mheap_blk_t *blk, int fl, int sl)
 {
     mheap_blk_t *curr;
-    std::unique_lock<std::mutex> lock(_mutex);
 
     curr = _blocks[fl][sl];
     blk->next_free = curr;
@@ -374,7 +373,6 @@ void mheap::remove_free_block(mheap_blk_t *blk, int fl, int sl)
 {
     mheap_blk_t *prev_blk;
     mheap_blk_t *next_blk;
-    std::unique_lock<std::mutex> lock(_mutex);
 
     prev_blk = blk->prev_free;
     next_blk = blk->next_free;
@@ -401,7 +399,6 @@ void mheap::remove_free_block(mheap_blk_t *blk, int fl, int sl)
 void mheap::blk_remove(mheap_blk_t *blk)
 {
     int fl, sl;
-
     mapping_insert(blk_size(blk), &fl, &sl);
     remove_free_block(blk, fl, sl);
 }
@@ -410,7 +407,6 @@ void mheap::blk_remove(mheap_blk_t *blk)
 void mheap::blk_insert(mheap_blk_t *blk)
 {
     int fl, sl;
-
     mapping_insert(blk_size(blk), &fl, &sl);
     insert_free_block(blk, fl, sl);
 }
@@ -549,10 +545,7 @@ again_search:
         /* jiejie: found that the memory is insufficient, need to expand the heap capacity and reallocate the memory */
         char * ptr = new char[MHEAP_DEFAULT_SIZE];
         DORA_ROBUSTNESS_CHECK(ptr, NULL);
-        {
-            std::unique_lock<std::mutex> lock(_mutex);
-            _mheap_ptr.push_back(ptr);
-        }
+        _mheap_ptr.push_back(ptr);
         mheap_pool_add(ptr, MHEAP_DEFAULT_SIZE);
         goto again_search;
     }
@@ -583,14 +576,12 @@ bool mheap::mheap_pool_is_exist(void *ps)
 
 void mheap::mheap_pool_record(void *ps)
 {
-    std::unique_lock<std::mutex> lock(_mutex);
     _pool_start.push_back(ps);
 }
 
 void mheap::mheap_pool_unrecord(void *ps)
 {
     int i = 0;
-    std::unique_lock<std::mutex> lock(_mutex);
 
     for (i = 0; i < (int)_pool_start.size(); ++i) {
         if (_pool_start[i] == ps) {
@@ -608,7 +599,6 @@ void mheap::mheap_pool_unrecord(void *ps)
 void mheap::mheap_ctl_init(void)
 {
     int i, j;
-    std::unique_lock<std::mutex> lock(_mutex);
 
     _block_null.next_free = &_block_null;
     _block_null.prev_free = &_block_null;
@@ -630,6 +620,7 @@ int mheap::mheap_init(void *pool_start, size_t pool_size)
 
 void* mheap::mheap_alloc(size_t size)
 {
+    std::unique_lock<std::mutex> lock(_mutex);
     size_t          adjust_size;
     mheap_blk_t   *blk;
 
@@ -693,6 +684,7 @@ void* mheap::mheap_aligned_alloc(size_t size, size_t align)
 
 void mheap::mheap_free(void *ptr)
 {
+    std::unique_lock<std::mutex> lock(_mutex);
     mheap_blk_t *blk;
 
     if (!ptr) {
@@ -805,7 +797,6 @@ int mheap::mheap_pool_del(void *pool_start)
     blk = offset_to_blk(pool_start, (int)(-MHEAP_BLK_HEADER_OVERHEAD));
     mapping_insert(blk_size(blk), &fl, &sl);
     remove_free_block(blk, fl, sl);
-
     mheap_pool_unrecord(pool_start);
     return DORA_SUCCESS;
 }

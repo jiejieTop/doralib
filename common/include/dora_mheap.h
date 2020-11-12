@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-11-03 17:33:18
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-04 17:52:20
+ * @LastEditTime: 2020-11-11 23:48:39
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -257,13 +257,6 @@ public:
     void mheap_print_info(void);
 };
 
-#else /* if mheap is not enabled, use libc instead */
-
-#define mheap_alloc            malloc
-#define mheap_calloc           calloc
-#define mheap_realloc          realloc
-#define mheap_free             free
+}
 
 #endif /* _DORA_MHEAP_H_ */
-
-}

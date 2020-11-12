@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-11-03 17:33:18
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-08 11:12:11
+ * @LastEditTime: 2020-11-11 13:24:17
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -23,6 +23,8 @@ using doralib::mheap;
 
 int main()
 {
+    DORA_LOG_SET_DEBUG_LEVEL
+    
     DORA_LOG_INFO("========================= mheap =========================");
 
     char *ptr[10];
@@ -47,8 +49,8 @@ int main()
 
     DORA_LOG_INFO("========================= free =========================");
 
-    for (int i = 10; i > 0; i--) {
-        mheap->mheap_free(ptr[i - 1]);
+    for (int i = 0; i < 10; i++) {
+        mheap->mheap_free(ptr[i]);
     }
 
     mheap->mheap_print_info();

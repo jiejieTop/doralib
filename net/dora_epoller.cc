@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-10-29 19:05:37
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-08 10:22:49
+ * @LastEditTime: 2020-11-12 00:06:36
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -80,7 +80,7 @@ static void *epoller_thread(void *arg)
             DORA_EXCEPTION("epoller wait fail");
         }
 
-        DORA_LOG_INFO("epoller wait return {}", cnt);
+        DORA_LOG_DEBUG("epoller wait return {}", cnt);
 
         for(int i = 0; i < cnt; i++)
         {
@@ -232,14 +232,12 @@ int epoller::epoller_del(dgram_socket *dgram)
 void epoller::epoller_del(void)
 {
     epoller_events_t *events;
-    std::map<int, epoller_events_t*>::iterator it;
-
-    for(auto & t : _events_map) {
-        events = t.second;
+    for(auto it = _events_map.begin(); it != _events_map.end();) {
+        events = it->second;
         if (DORA_SOCK_UDP == events->type) {
             epoller_del(events->u.dgram_event.dgram);
-        }
-        else if (DORA_SOCK_TCP == events->type) {
+            _events_map.erase(it++);          /* delete _events_map by key */
+        } else if (DORA_SOCK_TCP == events->type) {
             // epoller_del(events->u.stream_event.stream);
         }
     }
