@@ -3,7 +3,7 @@
  * @GitHub: https://github.com/jiejieTop
  * @Date: 2020-10-29 19:05:37
  * @LastEditors: jiejie
- * @LastEditTime: 2020-11-12 00:06:36
+ * @LastEditTime: 2020-11-15 11:54:06
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -13,52 +13,34 @@
 
 namespace doralib {
 
-using doralib::dgram_socket;
+using doralib::sock;
 
 const int maxevents = 16;
 
-static void epoller_dgram_events_handler(epoller_events_t *events, int happen_events)
+static void epoller_events_handler(epoller_events_t *events, int happen_events)
 {
     DORA_LOG_DEBUG("happen {} events", happen_events);
 
     if ((happen_events & EPOLLHUP) && !(happen_events & EPOLLIN)) {
-        if (NULL != events->u.dgram_event.close_cb) {
-            events->u.dgram_event.close_cb(events->u.dgram_event.dgram);
+        if (NULL != events->close_cb) {
+            events->close_cb(events->s);
         }
     }
     if (happen_events & EPOLLERR) {
-        if (NULL != events->u.dgram_event.error_cb) {
-            events->u.dgram_event.error_cb(events->u.dgram_event.dgram);
+        if (NULL != events->error_cb) {
+            events->error_cb(events->s);
         }
     }
     if (happen_events & (EPOLLIN | EPOLLPRI | EPOLLRDHUP)) {
-        if (NULL != events->u.dgram_event.read_cb) {
-            events->u.dgram_event.read_cb(events->u.dgram_event.dgram);
+        if (NULL != events->read_cb) {
+            events->read_cb(events->s);
         }
     }
     if (happen_events & EPOLLOUT) {
-        if (NULL != events->u.dgram_event.write_cb) {
-            events->u.dgram_event.write_cb(events->u.dgram_event.dgram);
+        if (NULL != events->write_cb) {
+            events->write_cb(events->s);
         }
     }
-}
-
-
-static void epoller_events_handler(epoller_events_t *events, int happen_events)
-{
-    switch (events->type)
-    {
-    case DORA_SOCK_UDP:
-        epoller_dgram_events_handler(events, happen_events);
-        break;
-    case DORA_SOCK_TCP:
-        DORA_EXCEPTION("no support epoller events type");
-        break;
-
-    default:
-        DORA_EXCEPTION("no support epoller events type");
-        break;
-    }   
 }
 
 static void *epoller_thread(void *arg)
@@ -163,28 +145,28 @@ epoller_events_t* epoller::epoller_event_find(int key)
     return NULL;
 }
 
-void epoller::epoller_event_add_cb(epoller_events_t *e, epoller_event_type_t type, dgram_event_cb cb)
+void epoller::epoller_event_add_cb(epoller_events_t *e, epoller_event_type_t type, sock_event_cb cb)
 {
     switch (type) {
     case DORA_EPOLLER_READ:
         DORA_LOG_DEBUG("add epoller read event");
         e->events |= (EPOLLIN | EPOLLPRI);
-        e->u.dgram_event.read_cb = cb;
+        e->read_cb = cb;
         break;
     case DORA_EPOLLER_WRITE:
         DORA_LOG_DEBUG("add epoller write event");
         e->events |= EPOLLOUT;
-        e->u.dgram_event.write_cb = cb;
+        e->write_cb = cb;
         break;
     case DORA_EPOLLER_CLOSE:
         DORA_LOG_DEBUG("add epoller close event");
         e->events |= EPOLLHUP;
-        e->u.dgram_event.close_cb = cb;
+        e->close_cb = cb;
         break;
     case DORA_EPOLLER_ERROR:
         DORA_LOG_DEBUG("add epoller error event");
         e->events |= EPOLLERR;
-        e->u.dgram_event.error_cb = cb;
+        e->error_cb = cb;
         break;
     default:
         DORA_EXCEPTION("unkonw event type!");
@@ -192,38 +174,37 @@ void epoller::epoller_event_add_cb(epoller_events_t *e, epoller_event_type_t typ
     }
 }
 
-int epoller::epoller_add(dgram_socket *dgram, epoller_event_type_t type, dgram_event_cb cb)
+int epoller::epoller_add(sock *s, epoller_event_type_t type, sock_event_cb cb)
 {
-    epoller_events_t *events = epoller_event_find(dgram->getfd());
+    epoller_events_t *events = epoller_event_find(s->sock_get_sockfd());
     if (NULL != events) {
         epoller_event_add_cb(events, type, cb);
-        epoller_update(EPOLL_CTL_MOD, dgram->getfd(), events->events);
+        epoller_update(EPOLL_CTL_MOD, s->sock_get_sockfd(), events->events);
         return DORA_SUCCESS;
     }
     
     events = new epoller_events_t;
     DORA_ROBUSTNESS_CHECK(events, DORA_MEM_NOT_ENOUGH);
     memset(events, 0, sizeof(epoller_events_t));
-    events->type = DORA_SOCK_UDP;
-    events->u.dgram_event.dgram = dgram;
+    events->s = s;
 
     /* frist need insert map */
-    _events_map.insert(make_pair(dgram->getfd(), events));
+    _events_map.insert(make_pair(s->sock_get_sockfd(), events));
 
-    DORA_LOG_DEBUG("insert events map fd {} ", dgram->getfd());
+    DORA_LOG_DEBUG("insert events map fd {} ", s->sock_get_sockfd());
 
     /* register callback function on events and update epoll wait events */
     epoller_event_add_cb(events, type, cb);
-    epoller_update(EPOLL_CTL_ADD, dgram->getfd(), events->events);
+    epoller_update(EPOLL_CTL_ADD, s->sock_get_sockfd(), events->events);
 
     return DORA_SUCCESS;
 }
 
-int epoller::epoller_del(dgram_socket *dgram)
+int epoller::epoller_del(sock *s)
 {
-    epoller_events_t *events = epoller_event_find(dgram->getfd());
+    epoller_events_t *events = epoller_event_find(s->sock_get_sockfd());
     if (NULL != events) {
-        epoller_update(EPOLL_CTL_DEL, dgram->getfd(), events->events);
+        epoller_update(EPOLL_CTL_DEL, s->sock_get_sockfd(), events->events);
         delete events;
     }
     return DORA_SUCCESS;
@@ -234,12 +215,8 @@ void epoller::epoller_del(void)
     epoller_events_t *events;
     for(auto it = _events_map.begin(); it != _events_map.end();) {
         events = it->second;
-        if (DORA_SOCK_UDP == events->type) {
-            epoller_del(events->u.dgram_event.dgram);
-            _events_map.erase(it++);          /* delete _events_map by key */
-        } else if (DORA_SOCK_TCP == events->type) {
-            // epoller_del(events->u.stream_event.stream);
-        }
+        epoller_del(events->s);
+        _events_map.erase(it++);          /* delete _events_map by key */
     }
 }
 

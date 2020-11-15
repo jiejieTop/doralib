@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-11-07 09:14:02
+ * @LastEditTime: 2020-11-15 10:25:07
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -23,9 +23,10 @@ typedef enum dora_errors {
     /* memory error */
     DORA_MEM_NOT_ENOUGH                             = -300,      
     /* socket error */
-    DORA_SOCKET_SEND_FAILED                         = -205,      
-    DORA_SOCKET_READ_FAILED                         = -204,
-    DORA_SOCKET_BIND_FAILED                         = -203,
+    DORA_SOCKET_SEND_FAILED                         = -206,      
+    DORA_SOCKET_READ_FAILED                         = -205,
+    DORA_SOCKET_BIND_FAILED                         = -204,
+    DORA_SOCKET_ACCEPT_FAILED                       = -203,
     DORA_SOCKET_CONNECT_FAILED                      = -202,
     DORA_SOCKET_UNKNOWN_HOST                        = -201,
     DORA_SOCKET_FAILED                              = -200,

@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-10-29 16:32:39
+ * @LastEditTime: 2020-11-15 10:54:35
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -27,12 +27,10 @@
 #include <errno.h>
 
 #include "dora_exception.h"
-#include "dora_nocopyable.h"
 
 using namespace std;
 
-namespace doralib 
-{
+namespace doralib {
 
 #define DORA_ADDR_ANY ((const char *)"0.0.0.0")
 
@@ -60,10 +58,8 @@ typedef enum sock_family {
     DORA_SOCK_UNIX = AF_UNIX,
 } sock_family_t;
 
-class sock : public noncopyable
-{
+class sock {
 private:
-    /// fd is the sockets API file descriptor
     int _sockfd;
     int _type;
     int _family;
@@ -71,37 +67,60 @@ private:
 
     bool _is_connected;
     bool _is_nonblocking;
-    /// Default is true; if set to false, the file descriptor is not closed when
-    /// the destructor is called.
     bool _close_on_destructor;
+    
+    sockaddr_in _remote_addr;
+    sockaddr_in _local_addr;
+    
+    int sock_set_addr(sockaddr_in & sockaddr, const char *addr, const char *port);
+    int sock_set_addr(sockaddr_in & sockaddr, const std::string & addr, const std::string & port);
 
 public:
-    sock();
-    sock(int _type, int _family, int _protocol);
+    sock(int _type = DORA_SOCK_UDP, int _family = AF_INET, int _protocol = 0);
+    sock(const char *addr, const char *port, 
+        int _type = DORA_SOCK_UDP, int _family = AF_INET, int _protocol = 0);
+    sock(const std::string & addr, const std::string & port, 
+            int _type = DORA_SOCK_UDP, int _family = AF_INET, int _protocol = 0);
     sock(const sock&) = delete;
-    sock(sock&&);
 
     ~sock();
-    
-    void sock_init(void);
+
     int sock_socket(void);
 
     int sock_close(void);
 
+    int sock_bind(void);
     int sock_bind(const sockaddr_in *addr);
     int sock_bind(const sockaddr_in & addr);
+    int sock_bind(const char *port);
     int sock_bind(const char *addr, const char *port);
+
+    int sock_listen(int backlog = 5);
+    int sock_listen(const sockaddr_in *addr, int backlog = 5);
+    int sock_listen(const char *addr, const char *port, int backlog = 5);
+    
     int sock_connect(const sockaddr_in *addr);
     int sock_connect(const sockaddr_in & addr);
     int sock_connect(const char *addr, const char *port);
     int sock_connect(const std::string & addr, const std::string & port);
+    int sock_disconnect(void);
 
+    int sock_accept(struct sockaddr_in remote_addr, socklen_t *addrlen);
+    int sock_accept(sock *s);
+    sock* sock_accept(void);
 
-    ssize_t sock_read(void *buf, size_t len, int timeout = -1, int flags = 0);
-    ssize_t sock_read(void *buf, size_t len, struct sockaddr *src_addr, socklen_t *addrlen, int timeout = -1, int flags = 0);
+    virtual ssize_t sock_read(void *buf, size_t len, int timeout = -1, int flags = 0);
+    virtual ssize_t sock_read(void *buf, size_t len, struct sockaddr *src_addr, 
+                                socklen_t *addrlen, int timeout = -1, int flags = 0);
     
-    ssize_t sock_write(const void *buf, size_t len, int timeout = -1);
-    ssize_t sock_write(const void *buf, size_t len, struct sockaddr *dest_addr, socklen_t addrlen, int timeout = -1, int flags = 0);
+    virtual ssize_t sock_write(const void *buf, size_t len, int timeout = -1);
+    virtual ssize_t sock_write(const void *buf, size_t len, struct sockaddr *dest_addr, 
+                                socklen_t addrlen, int timeout = -1, int flags = 0);
+    virtual ssize_t sock_write(const void *buf, size_t len, const char *addr, const char *port, 
+                                int timeout = -1, int flags = 0);
+    virtual ssize_t sock_write(const void *buf, size_t len, const std::string & addr, const std::string & port, 
+                                int timeout = -1, int flags = 0);
+
 
     bool sock_is_connected(void) { return _is_connected; }
     bool sock_is_nonblocking(void) { return _is_nonblocking; }

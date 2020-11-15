@@ -1,4 +1,3 @@
-# set(LIB_NAME "net")
 string(REGEX REPLACE ".*/(.*)" "\\1" LIB_NAME ${CMAKE_CURRENT_SOURCE_DIR}) 
 
 set(LIB_SRC_DIR 
