@@ -2,7 +2,7 @@
  * @Author: jiejie
  * @Github: https://github.com/jiejieTop
  * @Date: 2019-12-09 21:31:25
- * @LastEditTime: 2020-11-15 10:54:35
+ * @LastEditTime: 2020-11-15 13:43:19
  * @Description: the code belongs to jiejie, please keep the author information and source code according to the license.
  */
 
@@ -76,6 +76,7 @@ private:
     int sock_set_addr(sockaddr_in & sockaddr, const std::string & addr, const std::string & port);
 
 public:
+    void *data;
     sock(int _type = DORA_SOCK_UDP, int _family = AF_INET, int _protocol = 0);
     sock(const char *addr, const char *port, 
         int _type = DORA_SOCK_UDP, int _family = AF_INET, int _protocol = 0);
@@ -128,6 +129,8 @@ public:
     int sock_get_family(void) { return _family; }
     int sock_get_type(void) { return _type; }
     int sock_get_protocol(void) { return _protocol; }
+    sockaddr_in sock_get_remote_addr(void) { return _remote_addr; }
+    sockaddr_in sosc_get_local_addr(void) { return _local_addr; }
 
     int sock_set_opt(int level, int optname, const char* optval, socklen_t optlen) const;
     void sock_set_timeout(int v);

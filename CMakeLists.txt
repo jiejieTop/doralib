@@ -9,13 +9,14 @@ set(INCDIRS "")
 set(OUTDIRS "build")
 set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/${OUTDIRS}/lib/")
 set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/${OUTDIRS}/bin/")
+# set(BUILD_SHARED_LIBS, off)
 
-set(LIB_TYPE "SHARED")
+# set(LIB_TYPE "SHARED")
 # set(CMAKE_BUILD_TYPE "Release")   # Debug Release
 # set(CMAKE_INSTALL_PREFIX "/home/$ENV{USER}")
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "-std=c++11 -lpthread -Wall")
+    set(CMAKE_CXX_FLAGS "-std=c++11 -lpthread -Wall -fPIC")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -O0 -g -ggdb")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3") 
 endif(CMAKE_COMPILER_IS_GNUCXX)
