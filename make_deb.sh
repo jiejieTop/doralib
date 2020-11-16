@@ -1,20 +1,35 @@
 #!/bin/bash
 
+work_dir=`pwd`
+
+
 compiler=""
 compiler_path=""
 install=""
-install_path=""
+install_path="/usr/local"
 build_example=""
 build_type="Release"
-build_shared="off"
-cmake_arg=""
+build_arg=""
+deb_install=""
 
-fun_do_config()
+fun_do_set_output()
 {
-    current_pwd=`pwd`
-    mkdir -p $current_pwd/build $current_pwd/build/bin $current_pwd/build/lib
-    cd build
+    if [ " $work_dir" != " " -a "${work_dir}" != "/" ]; then
+        mkdir -p "${work_dir}/doralib-deb/DEBIAN"
+        mkdir -p "${work_dir}/doralib-deb/${install_path}"
+    else
+        echo "$work_dir is not a directory"
+        exit -1
+    fi
 }
+
+fun_do_del_output()
+{
+    if [ " $work_dir" != " " -a "${work_dir}" != "/" ]; then
+        sudo rm -rdf "${work_dir}/doralib-deb/"
+    fi
+}
+
 
 fun_do_help()
 {
@@ -44,6 +59,7 @@ fun_do_install()
     if [ " $1" != " " ]; then
         install_path=$1
     fi
+
 }
 
 fun_do_compiler()
@@ -72,68 +88,42 @@ fun_do_config_shared()
     fi
 }
 
-fun_do_check()
-{
-    if [ " $compiler" != " " ]; then
-        compiler_path=$(which $compiler)
-        if [ " $compiler_path" == " " ]; then
-            echo -e "\033[31mNo $compiler compiler found in the system\033[0m"
-            exit
-        fi
-    fi
 
-    echo "compiler : $compiler"
-    echo "compiler_path : $compiler_path"
-    echo "install : $install"
-    echo "install_path : $install_path"
-    echo "build_type : $build_type"
-    echo "build_example : $build_example"
+fun_do_build_lib() 
+{
+    ./build.sh ${build_arg}
 }
 
-fun_cmake_arg_init()
+fun_do_make_deb()
+{
+    ./build_deb.sh "${work_dir}/doralib-deb/" "doralib.deb"
+}
+
+
+fun_do_arg_init()
 {
     if [ " $compiler_path" != " " ]; then
-        cmake_arg="-DCMAKE_CXX_COMPILER=$compiler_path $cmake_arg";
+        build_arg="-c${compiler_path} ${build_arg}";
     fi
 
     if [ " $install_path" != " " ]; then
-        cmake_arg="-DCMAKE_INSTALL_PREFIX=$install_path $cmake_arg";
+        build_arg="-i${work_dir}/doralib-deb${install_path} ${build_arg}";
     fi
 
     if [ " $build_type" != " " ]; then
-        cmake_arg="-DCMAKE_BUILD_TYPE=$build_type $cmake_arg";
+        build_arg="-t${build_type} ${build_arg}";
     fi
 
     if [ " $build_shared" != " " ]; then
-        cmake_arg="-DBUILD_SHARED_LIBS=$build_shared $cmake_arg";
-    fi
-    cmake .. $cmake_arg;
-}
-
-fun_do_make()
-{
-    fun_cmake_arg_init;
-
-    if [ " $install" != " " ]; then
-        sudo make install
-    else
-        make
+        build_arg="-s${build_shared} ${build_arg}";
     fi
 
-    if [ " $build_example" != " " ]; then
-        mkdir -p $current_pwd/build/example
-        cd $current_pwd/build/example
-        cmake ../../example/. $cmake_arg;
-        make
-    fi
+    echo "${build_arg}";
 }
 
 main()
 {
-    fun_do_config;
-    
-    # [-h] [-e] [-i install path] [-c compiler path]
-    ARGS=`getopt -o hei::c::t::s:: --long help,example,install::,compiler::,type::shared:: -- "$@"`
+    ARGS=`getopt -o hi::c::t::s:: --long help,install::,compiler::,type::shared:: -- "$@"`
     if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
     eval set -- "$ARGS"
 
@@ -155,10 +145,6 @@ main()
                 fun_do_config_shared $2;
                 shift 2
                 ;;
-            -e | --example)
-                fun_do_example;
-                shift
-                ;;
             -h | --help)
                 fun_do_help;
                 shift
@@ -175,9 +161,11 @@ main()
         esac
     done
 
-    
-    fun_do_check;
-    fun_do_make;
+    fun_do_set_output
+    fun_do_arg_init
+    fun_do_build_lib
+    fun_do_make_deb
+    # fun_do_del_output
 }
 
 main "$@" 
